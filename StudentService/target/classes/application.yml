@@ -1,0 +1,52 @@
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          client: DEBUG
+management:
+  tracing:
+    sampling:
+      probabity: 1.0
+resilience4j:
+  circuitbreaker:
+    instances:
+      studentservice:
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        event-consumer-buffer-size: 10
+        failureRateThreshold: 50
+        permittedNumberOfCallsInHalfOpenState: 3
+        registerHealthIndicator: true
+        slidingWindowSize: 5
+        slidingWindowType: COUNT_BASED
+        waitDurationInOpenState: 5s
+  retry:
+    instances:
+      studentservice:
+        max-attempts: 3
+        wait-duration: 5s
+  timelimiter:
+    instances:
+      studentservice:
+        timeout-duration: 3s
+server:
+  port: 8081
+spring:
+  application:
+    name: STUDENTSERVICE
+  config:
+    import: optional:configserver:http://localhost:9091
+  datasource:
+    password: 7731937265PN@
+    url: jdbc:mysql://localhost:3306/springboot_microservice?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+  zipkin:
+    sampler:
+      probability: '1.0 '
